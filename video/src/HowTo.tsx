@@ -18,6 +18,7 @@ const scenes = {
   nav: 420,
   tips: 330,
   outro: 180,
+  credits: 240,
 };
 export const totalFrames = Object.values(scenes).reduce((a, b) => a + b, 0);
 
@@ -336,6 +337,35 @@ const Outro: React.FC = () => {
   );
 };
 
+const Credits: React.FC = () => {
+  const f = useCurrentFrame();
+  const rows: [string, React.ReactNode][] = [
+    ["App and video", "Per Hejndorf"],
+    ["Made with", "Claude by Anthropic"],
+    [
+      "Music",
+      <>
+        “Saudade Nostalgia” by Maxim Novak
+        <br />
+        <span style={{ fontSize: 32, color: c.muted }}>Source: Free Music Archive · License: CC BY-NC-ND</span>
+      </>,
+    ],
+  ];
+  return (
+    <AbsoluteFill style={{ alignItems: "center", justifyContent: "center", fontFamily: font, textAlign: "center" }}>
+      {rows.map(([k, v], i) => {
+        const p = prog(f, 10 + i * 25, 35 + i * 25);
+        return (
+          <div key={k} style={{ margin: "28px 0", opacity: p, transform: `translateY(${(1 - p) * 20}px)` }}>
+            <div style={{ fontSize: 26, letterSpacing: ".12em", textTransform: "uppercase", color: c.muted, marginBottom: 8 }}>{k}</div>
+            <div style={{ fontSize: 48, fontWeight: 700, color: c.green, lineHeight: 1.3 }}>{v}</div>
+          </div>
+        );
+      })}
+    </AbsoluteFill>
+  );
+};
+
 const order: [keyof typeof scenes, React.FC][] = [
   ["intro", Intro],
   ["idea", Idea],
@@ -348,6 +378,7 @@ const order: [keyof typeof scenes, React.FC][] = [
   ["nav", Nav],
   ["tips", Tips],
   ["outro", Outro],
+  ["credits", Credits],
 ];
 
 export const HowTo: React.FC = () => {

@@ -21,7 +21,8 @@ jobs:
         run: dotnet test HikeLoc.Tests/HikeLoc.Tests.csproj -c Release
 
       - name: Publish .NET App
-        run: dotnet publish HikeLoc/HikeLoc.csproj -c Release -o release
+        # The run number becomes the patch version (1.0.<run>), see Directory.Build.props
+        run: dotnet publish HikeLoc/HikeLoc.csproj -c Release -o release -p:BuildNumber=${{ github.run_number }}
 
       - name: Upload publish artifact
         uses: actions/upload-artifact@v4

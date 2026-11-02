@@ -52,6 +52,10 @@ favicon) is drawn by a script into `HikeLoc/wwwroot/icons` and `wwwroot/favicon.
 powershell -File tools\make-icons.ps1
 ```
 
+## Versioning
+
+The version is `Major.Minor.Build`. Major and minor are set by hand in `Directory.Build.props`. The build number is the GitHub Actions run number (0 for local builds). The footer on the Settings tab shows the credits, the version, the build time (Danish time) and the git commit, for example `v1.0.7 · 26.10.2026 14:32 · a1b2c3d`.
+
 ## Video
 
 `video/` holds a Remotion project that renders a how-to video of the app. See `video/README.md`.

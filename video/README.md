@@ -1,8 +1,11 @@
 # HikeLoc how-to video
 
-A ~1¾ minute instruction video made with [Remotion](https://www.remotion.dev/). The app's screens are
+A ~2 minute instruction video, rendered in 4K (3840x2160) for YouTube, made with [Remotion](https://www.remotion.dev/). The app's screens are
 redrawn in React (`src/screens.tsx`, styled after `HikeLoc/wwwroot/css/app.css`) with one example hike,
 so the numbers agree from scene to scene.
+
+Music: "Saudade Nostalgia" by Maxim Novak, from the Free Music Archive, licensed CC BY-NC-ND.
+The credits at the end of the video attribute it, together with Per Hejndorf and Claude by Anthropic.
 
 The music is not in the repository. Copy the track to `public/music.mp3` first:
 
