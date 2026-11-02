@@ -49,7 +49,7 @@ The app icon (iOS home screen, Windows/Android install via the web app manifest,
 favicon) is drawn by a script into `HikeLoc/wwwroot/icons` and `wwwroot/favicon.ico`:
 
 ```bash
-powershell -File toolsmake-icons.ps1
+powershell -File tools\make-icons.ps1
 ```
 
 ## Notes
