@@ -15,7 +15,7 @@ public class GeoTests
     }
 
     [Theory]
-    [InlineData(0, 0, 10)]
+    [InlineData(0, 10, 10)]
     [InlineData(350, 10, 20)]
     [InlineData(10, 350, -20)]
     [InlineData(0, 180, 180)]
