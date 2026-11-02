@@ -1,0 +1,129 @@
+@inherits AppComponentBase
+
+<section class="card">
+    @if (!Sensors.Running)
+    {
+        <h2>HikeLoc</h2>
+        <p class="hint">Sight a landscape feature <b>C</b> from two places, <b>A</b> and <b>B</b>, and HikeLoc works out where C is.</p>
+        <button class="big" @onclick="Sensors.StartAsync">Start GPS &amp; compass</button>
+        @if (Sensors.Error is { } e) { <p class="warn">@e</p> }
+    }
+    else
+    {
+        <div class="live">
+            <div><span class="lbl">GPS</span><b class="@GpsClass">@(Sensors.AccuracyM is { } a ? $"±{a:0} m" : "no fix")</b></div>
+            <div><span class="lbl">Heading (true)</span><b>@(TrueHeading is { } h ? $"{h:0}°" : "no compass")</b></div>
+        </div>
+        @if (Sensors.Error is { } err) { <p class="warn">@err</p> }
+        <button class="link" @onclick="Sensors.StopAsync">Stop sensors (saves battery)</button>
+    }
+</section>
+
+<section class="card">
+    <h2>Sightings</h2>
+    <p class="hint">Hold the phone flat like a compass, top edge pointing at C, hold steady and tap.</p>
+
+    <p class="hint">Have a real compass? Type its bearing (0-360°, as read on the compass) instead of using the phone's. GPS is still used for the position.</p>
+
+    <div class="slot">
+        <label>Compass bearing to C from A (optional)
+            <input type="number" inputmode="decimal" step="1" min="0" max="360" placeholder="use phone compass" @bind="_typedA" />
+        </label>
+        <button class="big" disabled="@(_busy || !Sensors.Running)" @onclick="() => CaptureAsync(Slot.A)">
+            @(State.A is null ? "Record A" : "Re-record A")@(_typedA is null ? "" : " with typed bearing")
+        </button>
+    </div>
+    <div class="slot">
+        <label>Compass bearing to C from B (optional)
+            <input type="number" inputmode="decimal" step="1" min="0" max="360" placeholder="use phone compass" @bind="_typedB" />
+        </label>
+        <button class="big" disabled="@(_busy || !Sensors.Running || State.A is null)" @onclick="() => CaptureAsync(Slot.B)">
+            @(State.B is null ? "Record B" : "Re-record B")@(_typedB is null ? "" : " with typed bearing")
+        </button>
+    </div>
+
+    @if (_busy) { <p class="hint">Hold steady…</p> }
+    @if (_message is { } m) { <p class="@(_messageIsWarn ? "warn" : "ok")">@m</p> }
+
+    @Describe("A", State.A)
+    @Describe("B", State.B)
+</section>
+
+@if (State.Triangulate() is { } r)
+{
+    <section class="card">
+        <h2>Feature C</h2>
+        @switch (r.Status)
+        {
+            case TriangulationStatus.Ok:
+                <div class="result">
+                    <div><span class="lbl">From A</span><b>@GeoMath.FormatDistance(r.DistanceFromA)</b> at @r.BearingFromA.ToString("0")°</div>
+                    <div><span class="lbl">From B</span><b>@GeoMath.FormatDistance(r.DistanceFromB)</b> at @r.BearingFromB.ToString("0")°</div>
+                    <div><span class="lbl">Position</span>@(r.C!.Value.Lat.ToString("0.00000")), @(r.C!.Value.Lon.ToString("0.00000"))</div>
+                    <div><span class="lbl">Uncertainty</span>about ±@GeoMath.FormatDistance(r.ErrorEstimateM) (sight lines cross at @r.IntersectionAngleDeg.ToString("0")°)</div>
+                </div>
+                @if (r.IntersectionAngleDeg is < 20 or > 160)
+                {
+                    <p class="warn">The sight lines are shallow. Walking further sideways from A before recording B gives a much better fix.</p>
+                }
+                break;
+            case TriangulationStatus.Parallel:
+                <p class="warn">The two sight lines are almost parallel (A and B are @GeoMath.FormatDistance(r.BaselineM) apart). Move further sideways, then re-record B.</p>
+                break;
+            default:
+                <p class="warn">The sight lines only cross behind you. Check that you pointed at the same feature both times and that the declination is right.</p>
+                break;
+        }
+    </section>
+}
+
+@code {
+    bool _busy;
+    double? _typedA;
+    double? _typedB;
+    string? _message;
+    bool _messageIsWarn;
+
+    string GpsClass => Sensors.AccuracyM switch { null => "bad", <= 15 => "good", <= 40 => "mid", _ => "bad" };
+
+    RenderFragment Describe(string name, Sighting? s) => builder =>
+    {
+        if (s is null) return;
+        builder.AddMarkupContent(0,
+            $"<p class=\"sub\"><b>{name}</b> {s.Lat:0.00000}, {s.Lon:0.00000} (±{s.AccuracyM:0} m) · " +
+            $"bearing {s.MagneticHeading:0}° magnetic, {State.TrueBearing(s):0}° true · {(s.Manual ? "typed compass bearing" : $"compass spread ±{s.HeadingStdDev:0}°")}</p>");
+    };
+
+    async Task CaptureAsync(Slot slot)
+    {
+        _message = null;
+        _busy = true;
+        try
+        {
+            var typed = slot == Slot.A ? _typedA : _typedB;
+            HeadingSample? heading;
+            if (typed is { } t)
+            {
+                if (t < 0 || t > 360) { Warn("Enter a bearing between 0 and 360°."); return; }
+                heading = new HeadingSample(GeoMath.Normalize360(t), 0, 0);
+            }
+            else
+            {
+                await Task.Delay(1500); // hold steady while the compass samples accumulate
+                heading = await Sensors.SampleHeadingAsync(1500);
+            }
+            if (heading is null) { Warn("No compass reading. Check compass permission and that the phone has a magnetometer."); return; }
+            if (Sensors.Position is not { } pos) { Warn("No GPS fix yet. Wait for the accuracy to show."); return; }
+
+            await State.RecordAsync(slot, new Sighting(
+                pos.Lat, pos.Lon, Sensors.AccuracyM ?? 0, heading.Mean, heading.StdDev, heading.Count, DateTimeOffset.Now, typed is not null));
+
+            if (typed is null && heading.StdDev > 6) Warn($"{slot} recorded, but the compass was unsteady (±{heading.StdDev:0}°). Consider re-recording.");
+            else if (Sensors.AccuracyM > 30) Warn($"{slot} recorded, but GPS accuracy is poor (±{Sensors.AccuracyM:0} m).");
+            else { _message = $"{slot} recorded."; _messageIsWarn = false; }
+        }
+        finally { _busy = false; }
+    }
+
+    void Warn(string text) { _message = text; _messageIsWarn = true; }
+}

@@ -1,0 +1,44 @@
+@inject SensorService Sensors
+@inject AppState State
+
+<div class="shell">
+    <main>
+        @switch (_tab)
+        {
+            case Tab.Sight:
+                <SightTab />
+                break;
+            case Tab.Map:
+                <MapTab />
+                break;
+            case Tab.Navigate:
+                <NavTab />
+                break;
+            case Tab.Settings:
+                <SettingsTab />
+                break;
+        }
+    </main>
+
+    <nav class="tabs">
+        <button class="@Cls(Tab.Sight)" @onclick="() => _tab = Tab.Sight">Sight</button>
+        <button class="@Cls(Tab.Map)" @onclick="() => _tab = Tab.Map">Map</button>
+        <button class="@Cls(Tab.Navigate)" @onclick="() => _tab = Tab.Navigate">Navigate</button>
+        <button class="@Cls(Tab.Settings)" @onclick="() => _tab = Tab.Settings">Settings</button>
+    </nav>
+</div>
+
+@code {
+    enum Tab { Sight, Map, Navigate, Settings }
+
+    Tab _tab = Tab.Sight;
+
+    string Cls(Tab t) => t == _tab ? "on" : "";
+
+    protected override Task OnInitializedAsync() => State.LoadAsync();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender) await Sensors.PreloadAsync();
+    }
+}

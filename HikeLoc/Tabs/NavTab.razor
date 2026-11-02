@@ -1,0 +1,72 @@
+@inherits AppComponentBase
+
+<section class="card">
+    <h2>Navigate to</h2>
+    <div class="row">
+        @foreach (var slot in new[] { Slot.A, Slot.B, Slot.C })
+        {
+            var s = slot;
+            <button class="big @(State.Target == s ? "on" : "")"
+                    disabled="@(State.PositionOf(s) is null)"
+                    @onclick="() => ChooseAsync(s)">@s</button>
+        }
+    </div>
+    @if (State.PositionOf(Slot.C) is null)
+    {
+        <p class="hint">C appears once A and B are recorded and their sight lines cross in front of you.</p>
+    }
+</section>
+
+@if (State.Target is { } target && State.PositionOf(target) is { } dest)
+{
+    if (Sensors.Position is { } here)
+    {
+        var distance = GeoMath.Distance(here, dest);
+        var bearing = GeoMath.Bearing(here, dest);
+        var arrived = distance < 15;
+
+        <section class="card nav">
+            @if (TrueHeading is { } heading)
+            {
+                var relative = GeoMath.AngleDiff(heading, bearing);
+                _rotation += GeoMath.AngleDiff(_rotation, relative); // unwrapped, so the arrow never spins the long way round
+                <div class="compass @(Math.Abs(relative) < 10 ? "aligned" : "")">
+                    <svg viewBox="-100 -100 200 200" style="transform: rotate(@(_rotation.ToString("0.0", System.Globalization.CultureInfo.InvariantCulture))deg)">
+                        <circle r="92" class="ring" />
+                        <polygon points="0,-80 34,30 0,12 -34,30" class="arrow" />
+                    </svg>
+                </div>
+                <p class="hint">Arrow up = straight ahead. Hold the phone flat, top edge forward.</p>
+            }
+            else
+            {
+                <p class="warn">No compass reading. Start the sensors on the Sight tab.</p>
+            }
+
+            <div class="big-num">@(arrived ? "Arrived" : GeoMath.FormatDistance(distance))</div>
+            <div class="live">
+                <div><span class="lbl">Bearing to @target</span><b>@bearing.ToString("0")°</b></div>
+                <div><span class="lbl">Your heading</span><b>@(TrueHeading is { } h ? $"{h:0}°" : "–")</b></div>
+                <div><span class="lbl">GPS</span><b>@(Sensors.AccuracyM is { } a ? $"±{a:0} m" : "–")</b></div>
+            </div>
+        </section>
+    }
+    else
+    {
+        <section class="card"><p class="warn">Waiting for a GPS fix. Start the sensors on the Sight tab.</p></section>
+    }
+}
+else
+{
+    <section class="card"><p class="hint">Pick A, B or C to get a live distance and direction.</p></section>
+}
+
+@code {
+    double _rotation;
+
+    Task ChooseAsync(Slot slot)
+    {
+        State.Target = slot;
+        return State.SaveAsync();
+    }
+}

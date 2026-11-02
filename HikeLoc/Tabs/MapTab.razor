@@ -1,0 +1,66 @@
+@inherits AppComponentBase
+@implements IAsyncDisposable
+
+<div class="map-wrap">
+    <div id="map"></div>
+    <div class="map-ctl">
+        <button class="@(State.BaseLayer == "osm" ? "on" : "")" @onclick='() => SetLayerAsync("osm")'>Street</button>
+        <button class="@(State.BaseLayer == "cycle" ? "on" : "")" @onclick='() => SetLayerAsync("cycle")'>Cycle</button>
+        <button @onclick="FitAsync">Fit</button>
+    </div>
+    @if (State.BaseLayer == "cycle" && string.IsNullOrWhiteSpace(State.ThunderforestKey))
+    {
+        <div class="map-note">Cycle map needs a Thunderforest API key: add it on the Settings tab.</div>
+    }
+</div>
+
+@code {
+    bool _ready;
+    bool _fit = true;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (Sensors.Module is not { } js) return;
+
+        if (firstRender)
+        {
+            await js.InvokeVoidAsync("initMap", "map", State.BaseLayer, State.ThunderforestKey);
+            _ready = true;
+        }
+        if (!_ready) return;
+
+        await js.InvokeVoidAsync("updateMap", new
+        {
+            a = Point(State.A?.Position),
+            b = Point(State.B?.Position),
+            c = Point(State.PositionOf(Slot.C)),
+            me = Point(Sensors.Position),
+        }, _fit);
+        _fit = false;
+    }
+
+    static object? Point(LatLon? p) => p is { } v ? new { lat = v.Lat, lon = v.Lon } : null;
+
+    async Task SetLayerAsync(string layer)
+    {
+        State.BaseLayer = layer;
+        await State.SaveAsync();
+        if (Sensors.Module is { } js) await js.InvokeVoidAsync("setLayer", layer, State.ThunderforestKey);
+    }
+
+    Task FitAsync()
+    {
+        _fit = true;
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        base.Dispose();
+        if (_ready && Sensors.Module is { } js)
+        {
+            try { await js.InvokeVoidAsync("destroyMap"); } catch (JSDisconnectedException) { }
+        }
+    }
+}

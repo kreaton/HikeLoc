@@ -1,0 +1,28 @@
+@inherits AppComponentBase
+
+<section class="card">
+    <h2>Compass</h2>
+    <label>Magnetic declination (° east is positive)
+        <input type="number" inputmode="decimal" step="0.1" @bind="State.Declination" @bind:after="State.SaveAsync" />
+    </label>
+    <p class="hint">Applied to both the phone compass and typed bearings. Look up your area at
+        <a href="https://www.ngdc.noaa.gov/geomag/calculators/magcalc.shtml" target="_blank" rel="noopener">NOAA</a>.</p>
+    <label>Assumed compass error (± °)
+        <input type="number" inputmode="decimal" step="0.5" min="0.5" @bind="State.CompassSigma" @bind:after="State.SaveAsync" />
+    </label>
+    <p class="hint">Only used for the uncertainty estimate on C.</p>
+</section>
+
+<section class="card">
+    <h2>Map</h2>
+    <label>Thunderforest API key (for the cycle map)
+        <input type="text" autocomplete="off" autocapitalize="off" spellcheck="false" @bind="State.ThunderforestKey" @bind:after="State.SaveAsync" />
+    </label>
+    <p class="hint">Free key from thunderforest.com. Stored only on this device.</p>
+</section>
+
+<section class="card">
+    <h2>Data</h2>
+    <p class="hint">Settings and sightings are saved in this browser's local storage.</p>
+    <button class="link danger" @onclick="State.ResetAsync">Clear sightings</button>
+</section>
