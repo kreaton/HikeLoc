@@ -1,6 +1,6 @@
 # HikeLoc
 
-A small hiking navigation aid, built as a .NET Blazor WebAssembly PWA for use on a phone.
+A small navigation aid for hiking and sailing, built as a .NET Blazor WebAssembly PWA for use on a phone.
 
 **Workflow**
 

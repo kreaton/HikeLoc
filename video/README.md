@@ -7,11 +7,9 @@ so the numbers agree from scene to scene.
 Music: "Saudade Nostalgia" by Maxim Novak, from the Free Music Archive, licensed CC BY-NC-ND.
 The credits at the end of the video attribute it, together with Per Hejndorf and Claude by Anthropic.
 
-The music is not in the repository. Copy the track to `public/music.mp3` first:
-
-```bash
-cp "c:/Users/perhe/Downloads/Maxim Novak - 09 Saudade Nostalgia.mp3" public/music.mp3
-```
+Images and music are read from `assets/` (set as Remotion's public folder in `remotion.config.ts`):
+the app icon, `Per.jpg`, the Claude and FMA logos, and the track
+`Maxim Novak - 09 Saudade Nostalgia.mp3`. The MP3 is gitignored, so put it there by hand.
 
 Then:
 

@@ -4,10 +4,12 @@ import { Diagram } from "./Diagram";
 import { Phone, Tap, TabName } from "./Phone";
 import { MapScreen, NavScreen, SettingsScreen, SightScreen } from "./screens";
 import { c, font } from "./theme";
+import { Hiking, Sailing } from "./UseCases";
 
 // Scene lengths in frames at 30 fps. HowTo's duration is their sum.
 const scenes = {
   intro: 150,
+  uses: 360,
   idea: 360,
   settings: 240,
   start: 210,
@@ -18,7 +20,7 @@ const scenes = {
   nav: 420,
   tips: 330,
   outro: 180,
-  credits: 240,
+  credits: 270,
 };
 export const totalFrames = Object.values(scenes).reduce((a, b) => a + b, 0);
 
@@ -117,6 +119,36 @@ const Intro: React.FC = () => {
       <div style={{ opacity: text, transform: `translateY(${(1 - text) * 30}px)`, textAlign: "center" }}>
         <div style={{ fontSize: 120, fontWeight: 800, color: c.green, marginTop: 40 }}>HikeLoc</div>
         <div style={{ fontSize: 42, color: c.muted }}>Find a landscape feature from two sightings, then walk to it.</div>
+      </div>
+    </AbsoluteFill>
+  );
+};
+
+const Uses: React.FC = () => {
+  const f = useCurrentFrame();
+  const panels: [string, React.ReactNode, React.ReactNode, number][] = [
+    ["Hiking", <Hiking line={prog(f, 70, 120)} />, <>Find a summit, a cairn or a hut you can see across the valley, then walk to it.</>, 20],
+    ["Sailing", <Sailing t={f} line={prog(f, 130, 180)} />, <>Pin down a headland, a lighthouse or an anchorage from two points along your course, then steer for it.</>, 80],
+  ];
+  return (
+    <AbsoluteFill style={{ alignItems: "center", justifyContent: "center", fontFamily: font }}>
+      <div style={{ opacity: prog(f, 0, 20), fontSize: 72, fontWeight: 800, color: c.green, marginBottom: 50 }}>
+        Made for hiking and sailing
+      </div>
+      <div style={{ display: "flex", gap: 70 }}>
+        {panels.map(([title, art, text, at]) => {
+          const p = prog(f, at, at + 30);
+          return (
+            <div key={title} style={{ width: 760, opacity: p, transform: `translateY(${(1 - p) * 50}px)` }}>
+              <div style={{ borderRadius: 28, overflow: "hidden", boxShadow: "0 24px 50px rgba(20,60,35,.22)", height: 460 }}>{art}</div>
+              <div style={{ fontSize: 46, fontWeight: 800, color: c.ink, marginTop: 30 }}>{title}</div>
+              <div style={{ fontSize: 32, lineHeight: 1.4, color: "#33443a", marginTop: 8 }}>{text}</div>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{ opacity: prog(f, 220, 250), fontSize: 34, color: c.muted, marginTop: 44 }}>
+        Same method on land and at sea: two sightings, one fix.
       </div>
     </AbsoluteFill>
   );
@@ -300,7 +332,7 @@ const Nav: React.FC = () => {
 const Tips: React.FC = () => {
   const f = useCurrentFrame();
   const tips = [
-    ["🧭", "Calibrate the compass with a figure-eight. Keep away from metal, magnets and power lines."],
+    ["🧭", "Calibrate the compass with a figure-eight. Keep away from metal, magnets, power lines and, on a boat, the engine."],
     ["✍️", "Have a real compass? Type its bearing on the Sight tab instead of using the phone's."],
     ["📐", "A wider angle between the sight lines means a smaller uncertainty."],
     ["🔋", "Stop the sensors when you don't need them, to save battery."],
@@ -339,35 +371,35 @@ const Outro: React.FC = () => {
 
 const Credits: React.FC = () => {
   const f = useCurrentFrame();
-  const rows: [string, React.ReactNode][] = [
-    ["App and video", "Per Hejndorf"],
-    ["Made with", "Claude by Anthropic"],
-    [
-      "Music",
-      <>
-        “Saudade Nostalgia” by Maxim Novak
-        <br />
-        <span style={{ fontSize: 32, color: c.muted }}>Source: Free Music Archive · License: CC BY-NC-ND</span>
-      </>,
-    ],
+  const rows: [string, string, React.CSSProperties, string, React.ReactNode][] = [
+    ["Per.jpg", "App and video", { borderRadius: "50%", border: `4px solid ${c.line}` }, "Per Hejndorf", null],
+    ["claude-ai-logo-rounded-hd-free-png.png", "Made with", { background: "transparent" }, "Claude by Anthropic", null],
+    ["fma.png", "Music", { borderRadius: 24, border: `2px solid ${c.line}` }, "“Saudade Nostalgia” by Maxim Novak", "Source: Free Music Archive · License: CC BY-NC-ND"],
   ];
   return (
-    <AbsoluteFill style={{ alignItems: "center", justifyContent: "center", fontFamily: font, textAlign: "center" }}>
-      {rows.map(([k, v], i) => {
-        const p = prog(f, 10 + i * 25, 35 + i * 25);
-        return (
-          <div key={k} style={{ margin: "28px 0", opacity: p, transform: `translateY(${(1 - p) * 20}px)` }}>
-            <div style={{ fontSize: 26, letterSpacing: ".12em", textTransform: "uppercase", color: c.muted, marginBottom: 8 }}>{k}</div>
-            <div style={{ fontSize: 48, fontWeight: 700, color: c.green, lineHeight: 1.3 }}>{v}</div>
-          </div>
-        );
-      })}
+    <AbsoluteFill style={{ alignItems: "center", justifyContent: "center", fontFamily: font }}>
+      <div>
+        {rows.map(([img, k, imgStyle, v, small], i) => {
+          const p = prog(f, 10 + i * 25, 35 + i * 25);
+          return (
+            <div key={k} style={{ display: "flex", alignItems: "center", gap: 44, margin: "34px 0", opacity: p, transform: `translateX(${(1 - p) * -30}px)` }}>
+              <Img src={staticFile(img)} style={{ width: 170, height: 170, objectFit: "cover", background: "#fff", ...imgStyle }} />
+              <div>
+                <div style={{ fontSize: 26, letterSpacing: ".12em", textTransform: "uppercase", color: c.muted, marginBottom: 6 }}>{k}</div>
+                <div style={{ fontSize: 52, fontWeight: 700, color: c.green, lineHeight: 1.25 }}>{v}</div>
+                {small && <div style={{ fontSize: 30, color: c.muted, marginTop: 6 }}>{small}</div>}
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </AbsoluteFill>
   );
 };
 
 const order: [keyof typeof scenes, React.FC][] = [
   ["intro", Intro],
+  ["uses", Uses],
   ["idea", Idea],
   ["settings", Settings],
   ["start", Start],
@@ -388,7 +420,7 @@ export const HowTo: React.FC = () => {
     <AbsoluteFill style={{ fontFamily: font }}>
       <Backdrop />
       <Audio
-        src={staticFile("music.mp3")}
+        src={staticFile("Maxim Novak - 09 Saudade Nostalgia.mp3")}
         volume={(f) => interpolate(f, [0, 30, durationInFrames - 120, durationInFrames], [0, 0.8, 0.8, 0], { extrapolateRight: "clamp" })}
       />
       {order.map(([name, Scene]) => {

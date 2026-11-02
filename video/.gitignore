@@ -1,4 +1,4 @@
 node_modules/
 out/
-# Licensed track, not committed: copy it here as public/music.mp3 (see README)
-public/music.mp3
+# Licensed track, not committed (see README)
+assets/*.mp3
