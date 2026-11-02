@@ -52,6 +52,10 @@ favicon) is drawn by a script into `HikeLoc/wwwroot/icons` and `wwwroot/favicon.
 powershell -File tools\make-icons.ps1
 ```
 
+## Video
+
+`video/` holds a Remotion project that renders a how-to video of the app. See `video/README.md`.
+
 ## Notes
 
 - Compass: Android uses `deviceorientationabsolute`; iOS uses `webkitCompassHeading` after a permission prompt. Headings are averaged (circular mean) over the capture window and the spread is stored with each sighting.
