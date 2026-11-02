@@ -43,6 +43,15 @@ Then open the URL on the phone and use *Add to Home screen*. The published build
 - Choose B so the two sight lines cross at a wide angle (ideally 45-90°). The app warns when they are shallow and shows an error estimate.
 - For the cycle map, get a free key at <https://www.thunderforest.com/> and paste it on the Settings tab.
 
+## Icons
+
+The app icon (iOS home screen, Windows/Android install via the web app manifest, and the browser
+favicon) is drawn by a script into `HikeLoc/wwwroot/icons` and `wwwroot/favicon.ico`:
+
+```bash
+powershell -File toolsmake-icons.ps1
+```
+
 ## Notes
 
 - Compass: Android uses `deviceorientationabsolute`; iOS uses `webkitCompassHeading` after a permission prompt. Headings are averaged (circular mean) over the capture window and the spread is stored with each sighting.
