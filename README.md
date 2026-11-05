@@ -2,6 +2,8 @@
 
 A small navigation aid for hiking and sailing, built as a .NET Blazor WebAssembly PWA for use on a phone.
 
+**Live app: <https://kreaton.github.io/HikeLoc/>**
+
 **Workflow**
 
 1. At **A**, point the phone at a landscape feature **C**, tap *Record A* (position + compass bearing are stored).
@@ -29,7 +31,7 @@ dotnet run --project HikeLoc      # https://localhost:7180
 
 - Publish and host on any static HTTPS host (GitHub Pages, Netlify, Azure Static Web Apps, Cloudflare Pages):
   `dotnet publish HikeLoc -c Release -o out` and upload `out/wwwroot`.
-  If the site is served from a sub-path (GitHub Pages project sites), change `<base href="/" />` in `index.html` to that sub-path.
+  The base href is relative, so it also works from a sub-path. Every push to `master` deploys to GitHub Pages and FTP.
 - Or tunnel the dev server (`cloudflared tunnel --url https://localhost:7180`, ngrok, VS Code port forwarding).
 
 Then open the URL on the phone and use *Add to Home screen*. The published build caches the app so it starts without signal; map tiles still need a connection.
@@ -65,3 +67,7 @@ The version is `Major.Minor.Build`. Major and minor are set by hand in `Director
 - Compass: Android uses `deviceorientationabsolute`; iOS uses `webkitCompassHeading` after a permission prompt. Headings are averaged (circular mean) over the capture window and the spread is stored with each sighting.
 - State (sightings, settings, key) is kept in `localStorage`.
 - Leaflet 1.9.4 is vendored in `wwwroot/lib/leaflet` so it is available offline.
+
+## License
+
+The code is under the [MIT License](LICENSE). Some files are excluded and keep their own terms: Leaflet in `HikeLoc/wwwroot/lib/leaflet` (BSD 2-Clause), and the portrait and third-party logos in `video/assets` (`Per.jpg`, `claude-ai-logo-rounded-hd-free-png.png`, `fma.png`).
