@@ -1,6 +1,14 @@
 # HikeLoc
 
-A small navigation aid for hiking and sailing, built as a .NET Blazor WebAssembly PWA for use on a phone.
+[![Live app](https://img.shields.io/badge/live%20app-open-2ea44f)](https://kreaton.github.io/HikeLoc/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+![Blazor WebAssembly](https://img.shields.io/badge/Blazor-WebAssembly-lightgrey)
+![.NET 10](https://img.shields.io/badge/.NET-10-lightgrey)
+![Installable web app](https://img.shields.io/badge/PWA-installable-lightgrey)
+
+![HikeLoc: find a landmark from two compass sightings](images/banner.png)
+
+**A small navigation aid for hiking and sailing, for use on your phone.**
 
 **Live app: <https://kreaton.github.io/HikeLoc/>**
 
