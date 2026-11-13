@@ -39,7 +39,7 @@ dotnet run --project HikeLoc      # https://localhost:7180
 
 - Publish and host on any static HTTPS host (GitHub Pages, Netlify, Azure Static Web Apps, Cloudflare Pages):
   `dotnet publish HikeLoc -c Release -o out` and upload `out/wwwroot`.
-  The base href is relative, so it also works from a sub-path. Every push to `master` deploys to GitHub Pages and FTP.
+  The base href is relative, so it also works from a sub-path. Every push to `master` deploys to GitHub Pages.
 - Or tunnel the dev server (`cloudflared tunnel --url https://localhost:7180`, ngrok, VS Code port forwarding).
 
 Then open the URL on the phone and use *Add to Home screen*. The published build caches the app so it starts without signal; map tiles still need a connection.
