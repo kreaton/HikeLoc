@@ -76,6 +76,10 @@ The version is `Major.Minor.Build`. Major and minor are set by hand in `Director
 - State (sightings, settings, key) is kept in `localStorage`.
 - Leaflet 1.9.4 is vendored in `wwwroot/lib/leaflet` so it is available offline.
 
-## License
+## License & Authorship
 
-The code is under the [MIT License](LICENSE). Some files are excluded and keep their own terms: Leaflet in `HikeLoc/wwwroot/lib/leaflet` (BSD 2-Clause), and the portrait and third-party logos in `video/assets` (`Per.jpg`, `claude-ai-logo-rounded-hd-free-png.png`, `fma.png`).
+This project is distributed under the terms of the [MIT License](LICENSE).
+
+Some files are excluded and keep their own terms: Leaflet in `HikeLoc/wwwroot/lib/leaflet` (BSD 2-Clause), and the portrait and third-party logos in `video/assets` (`Per.jpg`, `claude-ai-logo-rounded-hd-free-png.png`, `fma.png`).
+
+**AI authorship note:** Most of the source code in this repository was generated with AI coding agents (Claude Code), under my direction and review. Purely AI-generated material may not be eligible for copyright protection in some jurisdictions. To the extent any part of this project is protected by copyright, it is licensed under the MIT License, and the license's warranty and liability disclaimers apply to the project as a whole.
