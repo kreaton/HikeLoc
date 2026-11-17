@@ -83,3 +83,13 @@ This project is distributed under the terms of the [MIT License](LICENSE).
 Some files are excluded and keep their own terms: Leaflet in `HikeLoc/wwwroot/lib/leaflet` (BSD 2-Clause), and the portrait and third-party logos in `video/assets` (`Per.jpg`, `claude-ai-logo-rounded-hd-free-png.png`, `fma.png`).
 
 **AI authorship note:** Most of the source code in this repository was generated with AI coding agents (Claude Code), under my direction and review. Purely AI-generated material may not be eligible for copyright protection in some jurisdictions. To the extent any part of this project is protected by copyright, it is licensed under the MIT License, and the license's warranty and liability disclaimers apply to the project as a whole.
+
+<!-- notices:start -->
+### Independent development
+
+HikeLoc is an independent, personal project developed by Per Hejndorf. It is not affiliated with, endorsed by or sponsored by Microsoft or any other rights holder (including OpenStreetMap Foundation, Thunderforest or Anthropic). Product names and logos are trademarks of their respective owners and are used only to identify the services and tools the project works with.
+
+### Third-party notices and asset provenance
+
+[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) lists every third-party library, font and online service the project uses, with version, licence, source and whether it was modified. It also records where the icons, images, audio and video came from and how they are licensed. A few assets are not covered by the MIT License; [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) marks them and states their terms.
+<!-- notices:end -->
