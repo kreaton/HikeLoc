@@ -57,11 +57,11 @@ Used to build, test or render promotional material only; not part of the shipped
 | xunit | 2.9.2 | Apache-2.0 | [NuGet](https://www.nuget.org/packages/xunit/2.9.2) · [source](https://github.com/xunit/xunit) | No |
 | xunit.runner.visualstudio | 2.8.2 | Apache-2.0 | [NuGet](https://www.nuget.org/packages/xunit.runner.visualstudio/2.8.2) · [source](https://github.com/xunit/visualstudio.xunit) | No |
 | Microsoft.AspNetCore.Components.WebAssembly.DevServer | 10.0.0 | MIT | [NuGet](https://www.nuget.org/packages/Microsoft.AspNetCore.Components.WebAssembly.DevServer/10.0.0) | No |
-| @remotion/cli (`video/`) | 4.0.530 | Remotion License (free for individuals and companies of up to 3 people) | [npm](https://www.npmjs.com/package/@remotion/cli/v/4.0.530) | No |
-| @remotion/media-utils (`video/`) | 4.0.530 | MIT | [npm](https://www.npmjs.com/package/@remotion/media-utils/v/4.0.530) | No |
+| @remotion/cli (`video/`) | 4.0.544 | Remotion License (free for individuals and companies of up to 3 people) | [npm](https://www.npmjs.com/package/@remotion/cli/v/4.0.544) | No |
+| @remotion/media-utils (`video/`) | 4.0.544 | MIT | [npm](https://www.npmjs.com/package/@remotion/media-utils/v/4.0.544) | No |
 | react (`video/`) | 19.1.0 | MIT | [npm](https://www.npmjs.com/package/react/v/19.1.0) | No |
 | react-dom (`video/`) | 19.1.0 | MIT | [npm](https://www.npmjs.com/package/react-dom/v/19.1.0) | No |
-| remotion (`video/`) | 4.0.530 | Remotion License (free for individuals and companies of up to 3 people) | [npm](https://www.npmjs.com/package/remotion/v/4.0.530) | No |
+| remotion (`video/`) | 4.0.544 | Remotion License (free for individuals and companies of up to 3 people) | [npm](https://www.npmjs.com/package/remotion/v/4.0.544) | No |
 | @types/react (`video/`) | 19.1.8 | MIT | [npm](https://www.npmjs.com/package/@types/react/v/19.1.8) | No |
 | typescript (`video/`) | 5.8.3 | Apache-2.0 | [npm](https://www.npmjs.com/package/typescript/v/5.8.3) | No |
 
