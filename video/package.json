@@ -7,7 +7,7 @@
     "render": "remotion render HowTo out/hikeloc-howto.mp4"
   },
   "dependencies": {
-    "@remotion/cli": "4.0.530",
+    "@remotion/cli": "4.0.544",
     "@remotion/media-utils": "4.0.530",
     "react": "19.1.0",
     "react-dom": "19.1.0",
